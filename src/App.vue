@@ -1,14 +1,21 @@
 <script setup>
+import {ref, watchEffect} from 'vue';
+import AppNavBar from "@/components/AppNavBar.vue";
+
+const showNavBar = ref(true);
+
+
+
 
 </script>
-
 <template>
-  <h1 class="text-3xl font-bold underline text-green-500">
-    Hello world !
-  </h1>
-  <router-view></router-view>
+  <div>
+    <AppNavBar v-if="showNavBar"/>
+    <router-view/>
+  </div>
 </template>
 
-<style scoped>
 
+
+<style scoped>
 </style>
