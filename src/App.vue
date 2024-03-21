@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watchEffect} from 'vue';
+import { ref, watchEffect } from 'vue';
 import AppNavBar from "@/components/AppNavBar.vue";
 
 const showNavBar = ref(true);
@@ -14,8 +14,6 @@ const showNavBar = ref(true);
     <router-view/>
   </div>
 </template>
-
-
 
 <style scoped>
 </style>
