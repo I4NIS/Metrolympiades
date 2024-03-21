@@ -1,11 +1,77 @@
-<script setup>
-
-</script>
-
 <template>
-<h1>LOGIN</h1>
+  <div class="max-w-screen-sm mx-auto px-4 py-10">
+    <div v-if="errorMsg" class="mb-10 p-4 rounded-md bg-light-grey shadow-lg">
+      <p class="text-red-500">{{ errorMsg }}</p>
+    </div>
+
+    <form
+      @submit.prevent="login"
+      class="p-8 flex flex-col bg-light-grey rounded-md shadow-lg"
+    >
+      <h1 class="text-3xl text-at-light-green mb-4">Login</h1>
+
+      <div class="flex flex-col mb-2">
+        <label for="email" class="mb-1 text-sm text-at-light-green">Email</label>
+        <input
+          type="text"
+          required
+          class="p-2 text-gray-700 focus:outline-none bg-gray-100 rounded-md"
+          id="email"
+          v-model="email"
+        />
+      </div>
+
+      <div class="flex flex-col mb-2">
+        <label for="password" class="mb-1 text-sm text-at-light-green">Password</label>
+        <input
+          type="password"
+          required
+          class="p-2 text-gray-700 focus:outline-none bg-gray-100 rounded-md"
+          id="password"
+          v-model="password"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="bg-green-100"
+        >
+        Login
+      </button>
+    </form>
+  </div>
 </template>
 
-<style scoped>
+<script>
+import { ref } from "vue";
+import { supabase } from "@/supabase/init";
+import { useRouter } from "vue-router";
 
-</style>
+export default {
+  name: "login",
+  setup() {
+    const router = useRouter();
+    const email = ref(null);
+    const password = ref(null);
+    const errorMsg = ref(null);
+
+    const login = async () => {
+      try {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: email.value,
+          password: password.value,
+        });
+        if (error) throw error;
+        router.push('/');
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
+      }
+    };
+
+    return { email, password, errorMsg, login };
+  },
+};
+</script>
