@@ -26,19 +26,17 @@ export const useUserStore = defineStore('user', () => {
 export const useTeamStore = defineStore('team', () => {
     const team = ref(null)
 
-    const fetchTeamProperties = async (teamId) => {
-        if(!teamId){
-            team.value = null
-            return
-        }
+    const fetchTeamProperties = async () => {
+        const { data: userData } = await supabase.auth.getUser();
+        if(userData.user) {
+            const { data, error } = await supabase.from('teams').select('*').eq('leader', userData.user.id).single()
 
-        const { data, error } = await supabase.from('teams').select('*').eq('id', teamId).single()
-
-        if (error) {
-            console.error('Error fetching user profile:', error)
-            return
-        } else if(data) {
-            user.value = data
+            if (error) {
+                console.error('Error fetching team:', error)
+                return
+            } else if(data) {
+                team.value = data
+            }
         }
     }
     return { team, fetchTeamProperties }
