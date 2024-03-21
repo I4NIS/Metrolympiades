@@ -7,9 +7,7 @@ const router = createRouter({
             path: '/',
             name: 'matches',
             component: () => import('@/views/MatchView.vue'),
-            meta: {
-                requiresAuth: true
-            }
+
         },
         {
             path: '/signup',
@@ -25,9 +23,7 @@ const router = createRouter({
             path: '/creation',
             name: 'matchCreation',
             component: () => import('@/views/MatchCreationView.vue'),
-            meta: {
-                requiresAuth: true
-            }
+
         },
         {
             path: '/rankings',
@@ -38,9 +34,7 @@ const router = createRouter({
             path: '/settings',
             name: 'settings',
             component: () => import('@/views/TeamSettingsView.vue'),
-            meta: {
-                requiresAuth: true
-            }
+
         }
     ]
 })
