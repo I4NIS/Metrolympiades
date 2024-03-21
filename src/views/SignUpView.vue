@@ -12,87 +12,60 @@
 
       <div class="flex flex-col mb-2">
         <label for="email" class="mb-1 text-sm text-at-light-green">Email</label>
-        <input
-          type="text"
-          required
-          class="p-2 text-gray-700 focus:outline-none bg-gray-100 rounded-md"
-          id="email"
-          v-model="email"
-        />
+        <AppInput v-model="email" type="email" id="email" required/>
       </div>
 
       <div class="flex flex-col mb-2">
         <label for="password" class="mb-1 text-sm text-at-light-green">Password</label>
-        <input
-          type="password"
-          required
-          class="p-2 text-gray-700 focus:outline-none bg-gray-100 rounded-md"
-          id="password"
-          v-model="password"
-        />
+        <AppInput v-model="password" type="password" id="password" required/>
       </div>
 
       <div class="flex flex-col mb-2">
         <label for="confirmPassword" class="mb-1 text-sm text-at-light-green"
           >Confirm Password</label
         >
-        <input
-          type="password"
-          required
-          class="p-2 text-gray-700 focus:outline-none bg-gray-100 rounded-md"
-          id="confirmPassword"
-          v-model="confirmPassword"
-        />
+        <AppInput v-model="confirmPassword" type="password" id="confirmPassword" required/>
       </div>
 
-      <button
-        type="submit"
-        class="bg-green-100"
-        >
-        Register
-      </button>
+      <AppButton/>
     </form>
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
 import { supabase } from "../supabase/init";
 import { useRouter } from "vue-router";
+import AppInput from '@/components/AppInput.vue';
+import AppButton from '@/components/AppButton.vue';
 
-export default {
-  name: "register",
-  setup() {
-    const router = useRouter();
-    const email = ref(null);
-    const password = ref(null);
-    const confirmPassword = ref(null);
-    const errorMsg = ref(null);
 
-    const register = async () => {
-      if (password.value === confirmPassword.value) {
-        try {
-          const { error } = await supabase.auth.signUp({
-            email: email.value,
-            password: password.value,
-          });
-          if (error) throw error;
-          router.push('/');
-        } catch (error) {
-          errorMsg.value = error.message;
-          setTimeout(() => {
-            errorMsg.value = null;
-          }, 5000);
-        }
-        return;
-      }
-      errorMsg.value = "Error: Passwords do not match";
+const router = useRouter();
+const email = ref(null);
+const password = ref(null);
+const confirmPassword = ref(null);
+const errorMsg = ref(null);
+
+const register = async () => {
+  if (password.value === confirmPassword.value) {
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: email.value,
+        password: password.value,
+      });
+      if (error) throw error;
+      router.push('/');
+    } catch (error) {
+      errorMsg.value = error.message;
       setTimeout(() => {
         errorMsg.value = null;
       }, 5000);
-    };
-
-    return { email, password, confirmPassword, errorMsg, register };
-  },
+    }
+    return;
+  }
+  errorMsg.value = "Error: Passwords do not match";
+  setTimeout(() => {
+    errorMsg.value = null;
+  }, 5000);
 };
 </script>

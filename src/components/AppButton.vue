@@ -3,9 +3,9 @@
 </script>
 
 <template>
-
+    <button
+        type="submit"
+        class="bg-green-100"
+    >
+    </button>
 </template>
-
-<style scoped>
-
-</style>
