@@ -20,7 +20,11 @@
         <AppInput v-model="password" type="password" id="password" required/>
       </div>
 
-      <AppButton/>
+      <button
+          type="submit"
+          class="bg-green-100"
+      >apagnan
+      </button>
     </form>
   </div>
 </template>

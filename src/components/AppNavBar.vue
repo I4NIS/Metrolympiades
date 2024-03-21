@@ -12,6 +12,11 @@ const logout = async () => {
 
   await router.push({name: 'login'});
 }
+const login = ref(false)
+
+supabase.auth.onAuthStateChange((event, session) => {
+  login.value = session !== null;
+});
 
 const showMenu = ref(false);
 </script>
@@ -37,24 +42,25 @@ const showMenu = ref(false);
         </div>
 
         <ul :class="showMenu ? 'flex' : 'hidden'" class="flex-col mt-8 space-y-4 md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0">
-          <li class="text-sm font-bold text-gray-800 hover:text-blue-400">
+          <li v-if="login" class="text-sm font-bold text-gray-800 hover:text-blue-400">
             <RouterLink to="/settings">Team Settings</RouterLink>
           </li>
           <li class="text-sm font-bold text-gray-800 hover:text-blue-400">
             <RouterLink to="/rankings">Ranking</RouterLink>
           </li>
-          <li class="text-sm font-bold text-gray-800 hover:text-blue-400">
+          <li v-if="login" class="text-sm font-bold text-gray-800 hover:text-blue-400">
             <RouterLink to="/">Matchs</RouterLink>
           </li>
-          <li class="text-sm font-bold text-gray-800 hover:text-blue-400">
-            <router-link to="/login">Login</router-link>
-          </li>
-          <li class="text-sm font-bold text-gray-800 hover:text-blue-400">
-            <router-link to="/signup">Sign Up</router-link>
-          </li>
-          <li class="text-sm font-bold text-gray-800 hover:text-blue-400">
+          <li v-if="login" class="text-sm font-bold text-gray-800 hover:text-blue-400">
             <button class="ml-auto" @click="logout" >Logout</button>
           </li>
+          <li v-if="!login" class="text-sm font-bold text-gray-800 hover:text-blue-400">
+            <router-link to="/login">Login</router-link>
+          </li>
+          <li v-if="!login" class="text-sm font-bold text-gray-800 hover:text-blue-400">
+            <router-link to="/signup">Sign Up</router-link>
+          </li>
+
 
         </ul>
       </nav>
