@@ -2,27 +2,6 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { supabase } from "@/supabase/init";
 
-export const useUserStore = defineStore('user', () => {
-  const user = ref(null)
-
-  const fetchUserProfile = async (teamId) => {
-    if (!teamId) {
-      user.value = null
-      return
-    }
-
-    const {data, error} = await supabase.from('teams').select('members').eq('id', teamId).single()
-
-    if (error) {
-      console.error('Error fetching user profile:', error)
-      return
-    } else if(data) {
-      user.value = data
-    }
-  }
-  return { user, fetchUserProfile }
-})
-
 export const useTeamStore = defineStore('team', () => {
     const team = ref(null)
 
@@ -39,5 +18,80 @@ export const useTeamStore = defineStore('team', () => {
             }
         }
     }
-    return { team, fetchTeamProperties }
+
+    const removeMemberFromTeam = async (teamId, memberIndex) => {
+        try {
+            const { data: teamData, error: teamError } = await supabase
+                .from('teams')
+                .select('*')
+                .eq('id', teamId)
+                .single();
+    
+            if (teamError) {
+                throw new Error(`Error fetching team data: ${teamError.message}`);
+            }
+    
+            if (!teamData) {
+                throw new Error(`Team with ID ${teamId} not found.`);
+            }
+    
+            const { members } = teamData;
+    
+            members.splice(memberIndex, 1);
+
+            const { data: updatedTeamData, error: updateError } = await supabase
+                .from('teams')
+                .update({ members })
+                .eq('id', teamId)
+                .single();
+    
+            if (updateError) {
+                throw new Error(`Error updating team data: ${updateError.message}`);
+            }
+    
+            if (!updatedTeamData) {
+                throw new Error(`Failed to update team with ID ${teamId}.`);
+            }
+            
+            return updatedTeamData;
+        } catch (error) {
+            console.error(error.message);
+            throw error;
+        }
+    };
+    
+
+    return { team, fetchTeamProperties, removeMemberFromTeam }
+});
+
+export const useTeamsStore = defineStore('teams', () => {
+    const teams = ref(null);
+
+    const fetchTeamsProperties = async () => {
+        const { data, error } = await supabase.from('teams').select('*');
+        
+        if (error) {
+            console.error('Error fetching match:', error)
+            return
+        } else if(data) {
+            teams.value = data
+        }
+    }
+    return { teams, fetchTeamsProperties }
+})
+
+export const useMatchStore = defineStore('match', () => {
+    const match = ref(null) 
+
+    const fetchMatchProperties = async () => {
+        const { data, error } = await supabase.from('matchs').select('*');
+
+        if (error) {
+            console.error('Error fetching match:', error)
+            return
+        } else if(data) {
+            match.value = data
+        }
+    }
+    return { match, fetchMatchProperties }
 })

@@ -1,3 +1,32 @@
+<script setup>
+import { ref } from "vue";
+import { supabase } from "@/supabase/init";
+import { useRouter } from "vue-router";
+import AppInput from '@/components/AppInput.vue';
+import AppButton from '@/components/AppButton.vue';
+
+const router = useRouter();
+    const email = ref(null);
+    const password = ref(null);
+    const errorMsg = ref(null);
+
+    const login = async () => {
+      try {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: email.value,
+          password: password.value,
+        });
+        if (error) throw error;
+        router.push('/');
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
+      }
+    };
+</script>
+
 <template>
   <div class="max-w-screen-sm mx-auto px-4 py-10">
     <div v-if="errorMsg" class="mb-10 p-4 rounded-md bg-light-grey shadow-lg">
@@ -28,32 +57,3 @@
     </form>
   </div>
 </template>
-
-<script setup>
-import { ref } from "vue";
-import { supabase } from "@/supabase/init";
-import { useRouter } from "vue-router";
-import AppInput from '@/components/AppInput.vue';
-import AppButton from '@/components/AppButton.vue';
-
-const router = useRouter();
-    const email = ref(null);
-    const password = ref(null);
-    const errorMsg = ref(null);
-
-    const login = async () => {
-      try {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: email.value,
-          password: password.value,
-        });
-        if (error) throw error;
-        router.push('/');
-      } catch (error) {
-        errorMsg.value = `Error: ${error.message}`;
-        setTimeout(() => {
-          errorMsg.value = null;
-        }, 5000);
-      }
-    };
-</script>

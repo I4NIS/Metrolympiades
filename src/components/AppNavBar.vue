@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { supabase } from "@/supabase/init";
 import { useRouter } from "vue-router";
-import { useUserStore, useTeamStore } from '@/stores/store';
+import { useTeamStore } from '@/stores/store';
 import { storeToRefs } from "pinia";
 
 const { team } = storeToRefs(useTeamStore());
@@ -15,6 +15,7 @@ const logout = async () => {
 
   await router.push({name: 'login'});
 }
+
 const login = ref(false)
 
 supabase.auth.onAuthStateChange((event, session) => {
