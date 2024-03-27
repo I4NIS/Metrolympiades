@@ -60,7 +60,7 @@ fetchMatches();
         <div class="font-semibold">vs</div>
         <div class="flex items-center space-x-2">
           <div :class="scoreClass(item.score2, item.score1)">
-            <span class="font-bold text-xl text-right">{{ item.team2 }}</span>
+            <p class="font-bold text-xl text-right">{{ item.team2 }}</p>
           </div>
         </div>
       </div>
