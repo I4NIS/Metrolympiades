@@ -4,6 +4,7 @@ import { supabase } from "@/supabase/init";
 
 export const useTeamStore = defineStore('team', () => {
     const team = ref(null)
+    const teamName = ref(null)
 
     const fetchTeamProperties = async () => {
         const { data: userData } = await supabase.auth.getUser();
@@ -18,6 +19,17 @@ export const useTeamStore = defineStore('team', () => {
             }
         }
     }
+
+    const fetchTeamName = async (teamId) => {
+        const { data, error } = await supabase.from('teams').select('name').eq('id', teamId).single();
+
+        if (error) {
+            console.error('Error fetching team name:', error);
+            return null;
+        } else {
+            return data;
+        }
+    };
 
     const removeMemberFromTeam = async (teamId, memberIndex) => {
         try {
@@ -39,29 +51,56 @@ export const useTeamStore = defineStore('team', () => {
     
             members.splice(memberIndex, 1);
 
-            const { data: updatedTeamData, error: updateError } = await supabase
+            const { error: updateError } = await supabase
                 .from('teams')
                 .update({ members })
                 .eq('id', teamId)
                 .single();
-    
+
             if (updateError) {
                 throw new Error(`Error updating team data: ${updateError.message}`);
             }
-    
-            if (!updatedTeamData) {
-                throw new Error(`Failed to update team with ID ${teamId}.`);
-            }
-            
-            return updatedTeamData;
         } catch (error) {
             console.error(error.message);
             throw error;
         }
     };
-    
 
-    return { team, fetchTeamProperties, removeMemberFromTeam }
+    const addMemberToTeam = async (teamId, memberName) => {
+        try {
+            const { data: teamData, error: teamError } = await supabase
+                .from('teams')
+                .select('*')
+                .eq('id', teamId)
+                .single();
+
+            if (teamError) {
+                throw new Error(`Error fetching team data: ${teamError.message}`);
+            }
+
+            if (!teamData) {
+                throw new Error(`Team with ID ${teamId} not found.`);
+            }
+
+            const { members } = teamData;
+
+            members.push(memberName);
+
+            const { error: updateError } = await supabase
+                .from('teams')
+                .update({ members })
+                .eq('id', teamId)
+                .single();
+
+            if (updateError) {
+                throw new Error(`Error updating team data: ${updateError.message}`);
+            }
+        } catch (error) {
+            console.error(error.message);
+            throw error;
+        }
+    };
+    return { team, fetchTeamProperties, removeMemberFromTeam, addMemberToTeam, fetchTeamName }
 });
 
 export const useTeamsStore = defineStore('teams', () => {

@@ -12,6 +12,7 @@
     "@supabase/supabase-js": "^2.39.8",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
+    "vue-modal-dialogs": "^3.0.0",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {

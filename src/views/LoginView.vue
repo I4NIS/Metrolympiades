@@ -52,8 +52,17 @@ const router = useRouter();
       <button
           type="submit"
           class="bg-green-100"
-      >apagnan
+      >Get me In !
       </button>
     </form>
+
+    <div class="mt-4 text-center">
+      <router-link to="/signup" class="text-at-light-green">Don't have an account? Sign up</router-link>
+    </div>
+
+    <div>
+      <router-link to="/rankings" class="text-at-light-green">Guest access</router-link>
+    </div>
   </div>
+
 </template>
