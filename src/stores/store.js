@@ -4,6 +4,7 @@ import { supabase } from "@/supabase/init";
 
 export const useTeamStore = defineStore('team', () => {
     const team = ref(null)
+    const teamName = ref(null)
 
     const fetchTeamProperties = async () => {
         const { data: userData } = await supabase.auth.getUser();
@@ -18,6 +19,17 @@ export const useTeamStore = defineStore('team', () => {
             }
         }
     }
+
+    const fetchTeamName = async (teamId) => {
+        const { data, error } = await supabase.from('teams').select('name').eq('id', teamId).single();
+
+        if (error) {
+            console.error('Error fetching team name:', error);
+            return null;
+        } else {
+            return data;
+        }
+    };
 
     const removeMemberFromTeam = async (teamId, memberIndex) => {
         try {
@@ -88,7 +100,7 @@ export const useTeamStore = defineStore('team', () => {
             throw error;
         }
     };
-    return { team, fetchTeamProperties, removeMemberFromTeam, addMemberToTeam }
+    return { team, fetchTeamProperties, removeMemberFromTeam, addMemberToTeam, fetchTeamName }
 });
 
 export const useTeamsStore = defineStore('teams', () => {
