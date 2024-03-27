@@ -33,7 +33,8 @@ useMatchStore().fetchMatchProperties();
 
   <div class="flex justify-center items-end mb-8">
     <router-link to="/creation" class="bg-green-100 px-4 py-2 rounded-md">Create a match</router-link>
-  </div></template>
+  </div>
+</template>
 
 <style scoped>
 
