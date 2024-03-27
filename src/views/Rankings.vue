@@ -34,8 +34,8 @@ const getWinsForTeam = (teamId) => {
   match.value.forEach(match => {
     if ((match.team1 === teamId && match.team1_score > match.team2_score) || 
         (match.team2 === teamId && match.team2_score > match.team1_score)) {
-      wins++;
-    }
+      wins = wins+3;
+    } 
   });
   return wins;
 };
