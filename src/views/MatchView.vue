@@ -1,10 +1,38 @@
 <script setup>
+import AppButton from "@/components/AppButton.vue";
+import {storeToRefs} from "pinia";
+import {useMatchStore} from "@/stores/store.js";
 
-import AppNavBar from "@/components/AppNavBar.vue";
+const { match } = storeToRefs(useMatchStore());
+useMatchStore().fetchMatchProperties();
+
 </script>
 
 <template>
-  <h1 class="bg-red-700">MATCH</h1>
+  <div v-for="item in match" :key="item.id">
+    <div class="bg-red-700 mb-5 flex justify-center items-center flex-col">
+      <div class="flex">
+        <h1>{{ item.time }}</h1>
+        <h1>-</h1>
+        <h1>{{ item.sport }}</h1>
+      </div>
+      <div class="flex">
+        <h1>{{item.team1}}</h1>
+        <h1>vs</h1>
+        <h1>{{item.team2}}</h1>
+      </div>
+      <div class="flex">
+        <h1>{{ item.team1_score }}</h1>
+        <h1>-</h1>
+        <h1>{{ item.team2_score }}</h1>
+      </div>
+    </div>
+
+  </div>
+
+
+  <AppButton :buttonText="'Create a match'" />
+
 </template>
 
 <style scoped>

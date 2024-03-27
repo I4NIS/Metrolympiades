@@ -34,6 +34,8 @@ const register = async () => {
     errorMsg.value = null;
   }, 5000);
 };
+
+const buttonText = "Let's goooo";
 </script>
 
 <template>
@@ -66,7 +68,7 @@ const register = async () => {
           <AppInput v-model="confirmPassword" type="password" id="confirmPassword" required/>
         </div>
 
-        <AppButton :buttonText="'Lets goooo'" />
+        <AppButton :buttonText="buttonText" />
       </form>
     </div>
   </div>
