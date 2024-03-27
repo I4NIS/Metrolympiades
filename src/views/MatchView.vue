@@ -72,6 +72,10 @@ fetchMatches();
       <AppButton :buttonText="'Create a match'" />
     </div>
   </div>
+
+
+  <AppButton :buttonText="'Create a match'" />
+
 </template>
 
 
