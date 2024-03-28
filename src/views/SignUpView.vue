@@ -20,7 +20,7 @@ const register = async () => {
         password: password.value,
       });
       if (error) throw error;
-      router.push('/');
+      router.push('/settings');
     } catch (error) {
       errorMsg.value = error.message;
       setTimeout(() => {

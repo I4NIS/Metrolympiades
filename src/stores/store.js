@@ -38,17 +38,17 @@ export const useTeamStore = defineStore('team', () => {
                 .select('*')
                 .eq('id', teamId)
                 .single();
-    
+
             if (teamError) {
                 throw new Error(`Error fetching team data: ${teamError.message}`);
             }
-    
+
             if (!teamData) {
                 throw new Error(`Team with ID ${teamId} not found.`);
             }
-    
+
             const { members } = teamData;
-    
+
             members.splice(memberIndex, 1);
 
             const { error: updateError } = await supabase
@@ -100,8 +100,54 @@ export const useTeamStore = defineStore('team', () => {
             throw error;
         }
     };
-    return { team, fetchTeamProperties, removeMemberFromTeam, addMemberToTeam, fetchTeamName }
+
+    const updateTeamName = async (teamId, newName) => {
+        try {
+            const { error } = await supabase
+                .from('teams')
+                .update({ name: newName })
+                .eq('id', teamId);
+
+            if (error) {
+                throw new Error(`Erreur lors de la mise à jour du nom de l'équipe: ${error.message}`);
+            }
+
+            teamName.value = newName;
+        } catch (error) {
+            console.error(error.message);
+            throw error;
+        }
+    };
+    const updateTeamMembers = async (teamId, updatedMembers) => {
+        try {
+            const { error } = await supabase
+                .from('teams')
+                .update({ members: updatedMembers }) // Met à jour la liste des membres
+                .eq('id', teamId);
+
+            if (error) {
+                throw new Error(`Erreur lors de la mise à jour des membres de l'équipe: ${error.message}`);
+            }
+            team.value.members
+            team.value.members = updatedMembers; // Met à jour la valeur locale des membres dans le store
+        } catch (error) {
+            console.error(error.message);
+            throw error;
+        }
+    };
+
+    return {
+        team,
+        fetchTeamProperties,
+        removeMemberFromTeam,
+        addMemberToTeam,
+        fetchTeamName,
+        updateTeamName,
+        updateTeamMembers
+    }
+
 });
+
 
 export const useTeamsStore = defineStore('teams', () => {
     const teams = ref(null);

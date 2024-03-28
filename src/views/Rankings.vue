@@ -10,21 +10,21 @@ const { match } = storeToRefs(useMatchStore());
 let leaderboard = ref([]);
 
 const fetchTeams = async () => {
-  await useTeamsStore().fetchTeamsProperties(); 
+  await useTeamsStore().fetchTeamsProperties();
   teams?.value.forEach(team => {
     const equipe = team.name
     const wins = getWinsForTeam(team.id);
     leaderboard.value.push({ equipe: equipe, wins: wins });
   });
-  sortLeaderboard(); 
+  sortLeaderboard();
 }
 
 const fetchMatches = async () => {
-  await useMatchStore().fetchMatchProperties(); 
+  await useMatchStore().fetchMatchProperties();
 }
 
-fetchMatches(); 
-fetchTeams(); 
+fetchMatches();
+fetchTeams();
 
 const getWinsForTeam = (teamId) => {
   if (!match.value) return 0;
@@ -32,10 +32,10 @@ const getWinsForTeam = (teamId) => {
   let wins = 0;
 
   match.value.forEach(match => {
-    if ((match.team1 === teamId && match.team1_score > match.team2_score) || 
+    if ((match.team1 === teamId && match.team1_score > match.team2_score) ||
         (match.team2 === teamId && match.team2_score > match.team1_score)) {
       wins = wins + 3;
-    } else if ((match.team1 === teamId && match.team1_score == match.team2_score) || 
+    } else if ((match.team1 === teamId && match.team1_score == match.team2_score) ||
                 (match.team2 === teamId && match.team2_score == match.team1_score)) {
       wins++;
     }
@@ -44,7 +44,7 @@ const getWinsForTeam = (teamId) => {
 };
 
 const sortLeaderboard = () => {
-  leaderboard.value.sort((a, b) => b.wins - a.wins); 
+  leaderboard.value.sort((a, b) => b.wins - a.wins);
 };
 
 </script>

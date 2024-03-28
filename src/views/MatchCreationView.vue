@@ -35,31 +35,45 @@ const team2Score = ref(0);
 
 </script>
 <template>
-    <form class="flex justify-center items-center flex-col mt-10" >
-      <label for="team1">Your Team: {{team.name}}</label>
-      <label for="opponentTeam">Opponent Team:</label>
+  <form class="max-w-lg mx-auto mt-10 bg-white p-8 rounded-lg shadow-md">
+    <div class="mb-4">
+      <label for="team1" class="text-gray-700 font-semibold">Your Team:</label>
+      <span class="block text-gray-800">{{ team.name }}</span>
+    </div>
 
-      <select v-model="selectedOpponentTeam">
+    <div class="mb-4">
+      <label for="opponentTeam" class="text-gray-700 font-semibold">Opponent Team:</label>
+      <select v-model="selectedOpponentTeam" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
         <option v-for="team in teams" :key="team.id" :value="team.id">{{ team.name }}</option>
       </select>
+    </div>
 
-      <label for="sport">Sport:</label>
-      <select v-model="selectedSport">
+    <div class="mb-4">
+      <label for="sport" class="text-gray-700 font-semibold">Sport:</label>
+      <select v-model="selectedSport" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
         <option v-for="sport in sports" :key="sport.id" :value="sport.name">{{ sport.name }}</option>
       </select>
+    </div>
 
-      <label for="time">Time:</label>
-      <input type="time" id="time" v-model="selectedTime">
+    <div class="mb-4">
+      <label for="time" class="text-gray-700 font-semibold">Time:</label>
+      <input type="time" id="time" v-model="selectedTime" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+    </div>
 
-      <div class="flex">
-        <label for="team1Score">Your Team Score:</label>
-        <input type="number" id="team1Score" v-model.number="team1Score">
-
-        <label for="opponentTeamScore">Opponent Team Score:</label>
-        <input type="number" id="opponentTeamScore" v-model.number="team2Score">
+    <div class="flex mb-4">
+      <div class="w-1/2 mr-2">
+        <label for="team1Score" class="text-gray-700 font-semibold">Your Team Score:</label>
+        <input type="number" id="team1Score" v-model.number="team1Score" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
       </div>
-      <AppButton :buttonText="'Create the Match'" class="mt-10"/>
-    </form>
+      <div class="w-1/2 ml-2">
+        <label for="opponentTeamScore" class="text-gray-700 font-semibold">Opponent Team Score:</label>
+        <input type="number" id="opponentTeamScore" v-model.number="team2Score" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+      </div>
+    </div>
+
+    <AppButton :buttonText="'Create the Match'" class="w-full"/>
+  </form>
+
 
 </template>
 
