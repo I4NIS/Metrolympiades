@@ -69,7 +69,13 @@ fetchMatches();
       </div>
     </div>
     <div class="flex justify-end">
-      <AppButton :buttonText="'Create a match'" />
+      <button
+          type="submit"
+          class="bg-green-100 px-4 py-2 rounded-md"
+      >
+        <RouterLink to="/creation">Matchs</RouterLink>
+      </button>
+
     </div>
   </div>
 </template>

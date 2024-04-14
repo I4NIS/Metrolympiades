@@ -85,15 +85,6 @@ const removeMember = async (index) => {
   }
 }
 
-const addMember = async () => {
-  try {
-    await useTeamStore().addMemberToTeam(team.value.id, memberId);
-    await useTeamStore().fetchTeamProperties();
-  } catch (error) {
-    console.error("Erreur lors de l'ajout du membre:", error);
-  }
-}
-
 const createTeam = async () => {
   try {
     const {data, error} = await useTeamStore().fetchTeamName(team.value.id);

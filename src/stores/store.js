@@ -175,19 +175,36 @@ export const useTeamsStore = defineStore('teams', () => {
 
     const fetchTeamsProperties = async () => {
         const { data, error } = await supabase.from('teams').select('*');
-        
+
         if (error) {
-            console.error('Error fetching match:', error)
+            console.error('Error fetching teams:', error)
             return
         } else if(data) {
             teams.value = data
         }
-    }
-    return { teams, fetchTeamsProperties }
-})
+    };
+
+    const fetchAllTeams = async () => {
+        try {
+            const { data, error } = await supabase.from('teams').select('*');
+
+            if (error) {
+                throw new Error(`Erreur lors de la récupération des équipes: ${error.message}`);
+            }
+
+            return data;
+        } catch (error) {
+            console.error(error.message);
+            throw error;
+        }
+    };
+
+    return { teams, fetchTeamsProperties, fetchAllTeams }
+});
+
 
 export const useMatchStore = defineStore('match', () => {
-    const match = ref(null) 
+    const match = ref(null)
 
     const fetchMatchProperties = async () => {
         const { data, error } = await supabase.from('matchs').select('*');
@@ -199,5 +216,46 @@ export const useMatchStore = defineStore('match', () => {
             match.value = data
         }
     }
-    return { match, fetchMatchProperties }
-})
+
+    const fetchOpponentTeams = async () => {
+        try {
+            const { data, error } = await supabase.from('teams').select('id, name');
+
+            if (error) {
+                throw new Error(`Erreur lors de la récupération des équipes adverses: ${error.message}`);
+            }
+
+            return data;
+        } catch (error) {
+            console.error(error.message);
+            throw error;
+        }
+    };
+
+    const createMatch = async (matchData) => {
+        try {
+            const { data, error } = await supabase.from('matchs').insert([
+                {
+                    created_at: new Date(),
+                    team1: matchData.teamId,
+                    team2: matchData.opponentTeamId,
+                    sport: matchData.sport,
+                    time: matchData.time,
+                    team1_score: matchData.team1Score,
+                    team2_score: matchData.team2Score
+                }
+            ]);
+
+            if (error) {
+                throw new Error(`Erreur lors de la création du match: ${error.message}`);
+            }
+
+            console.log("Match créé avec succès:", data);
+        } catch (error) {
+            console.error(error.message);
+            throw error;
+        }
+    };
+
+    return { match, fetchMatchProperties, fetchOpponentTeams, createMatch}
+});
