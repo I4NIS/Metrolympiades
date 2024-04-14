@@ -117,5 +117,4 @@ const resetFields = () => {
   team2Score.value = 0;
 };
 
-
 </script>

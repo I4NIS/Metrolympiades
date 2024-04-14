@@ -73,7 +73,7 @@ fetchMatches();
           type="submit"
           class="bg-green-100 px-4 py-2 rounded-md"
       >
-        <RouterLink to="/creation">Matchs</RouterLink>
+        <RouterLink to="/creation">Create a match </RouterLink>
       </button>
 
     </div>
