@@ -103,13 +103,32 @@ export const useTeamStore = defineStore('team', () => {
 
     const updateTeamName = async (teamId, newName) => {
         try {
-            const { error } = await supabase
+            const { data: teamData, error: teamError } = await supabase
                 .from('teams')
-                .update({ name: newName })
+                .select('*')
+                .eq('id', teamId)
+                .single();
+
+            if (teamError) {
+                throw new Error(`Error fetching team data: ${teamError.message}`);
+            }
+
+            if (!teamData) {
+                throw new Error(`Team with ID ${teamId} not found.`);
+            }
+
+            const { members } = teamData;
+            //console.log(teamData)
+            // Vérifier si le champ members est null
+            const updatedMembers = members === null ? [] : members;
+
+            const { error: updateError } = await supabase
+                .from('teams')
+                .update({ name: newName, members: updatedMembers })
                 .eq('id', teamId);
 
-            if (error) {
-                throw new Error(`Erreur lors de la mise à jour du nom de l'équipe: ${error.message}`);
+            if (updateError) {
+                throw new Error(`Error updating team data: ${updateError.message}`);
             }
 
             teamName.value = newName;
@@ -118,6 +137,8 @@ export const useTeamStore = defineStore('team', () => {
             throw error;
         }
     };
+
+
     const updateTeamMembers = async (teamId, updatedMembers) => {
         try {
             const { error } = await supabase

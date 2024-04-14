@@ -9,7 +9,6 @@ const { team } = storeToRefs(useTeamStore());
 
 useTeamStore().fetchTeamProperties()
 const router = useRouter();
-
 const logout = async () => {
   await supabase.auth.signOut();
 

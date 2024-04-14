@@ -1,12 +1,10 @@
 <script setup>
-
 defineProps({
     modelValue : {
         type: String,
         default: ''
     }
 })
-
 </script>
 
 <template>

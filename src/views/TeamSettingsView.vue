@@ -61,14 +61,20 @@ const closeModal = () => {
 
 const confirmAddMember = async () => {
   try {
+    if (team.value.members.length >= 5) {
+      throw new Error("L'équipe a déjà atteint le nombre maximum de membres.");
+    }
+
     await useTeamStore().addMemberToTeam(team.value.id, newMemberName.value);
     await useTeamStore().fetchTeamProperties();
     newMemberName.value = '';
     closeModal();
   } catch (error) {
-    console.error("Erreur lors de l'ajout du membre:", error);
+    alert(error.message);
   }
 };
+
+
 
 const removeMember = async (index) => {
   try {
